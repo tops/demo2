@@ -5,7 +5,7 @@ require_once("classes/DB.class.php");
 
 # $url_params blir en array med alla "värden" som står efter ? avgränsade med /
 # ex. /Posts/single/11 kommer ge en array med 3 värden som är Posts, single och 11
-$url_parts = getUrlParts($_GET); 
+$URLparts = getUrlParts($_GET); 
 $class = array_shift($url_parts); # tar ut första värdet och lägger den i $class, i vårt exempel ovan "Posts"
 $method = array_shift($url_parts); # tar ut andra värdet och lägger den i $method, i vårt exempel ovan "single"
 
@@ -15,7 +15,7 @@ require_once("classes/".$class.".class.php");
 # Anropa metoden vill vill köra på klassen vi har fått från vår URL 
 # samt skicka med övriga parametrar in till den metoden, i vårt exempel ovan finns "11" kvar
 # Svaret från anropet av metoden, dvs det den kör return på, lagrar vi i $data
-$data = $class::$method($url_parts); 
+$data = $class::$method($URLparts); 
 
 
 if(isset($data['redirect'])){ # om $data innehåller något på nyckeln 'redirect'
