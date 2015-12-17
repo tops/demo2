@@ -5,29 +5,30 @@ require_once("classes/DB.class.php");
 
 # $url_params blir en array med alla "värden" som står efter ? avgränsade med /
 # ex. /Posts/single/11 kommer ge en array med 3 värden som är Posts, single och 11
+
 $URLparts = getUrlParts($_GET); 
 $class = array_shift($url_parts); # tar ut första värdet och lägger den i $class, i vårt exempel ovan "Posts"
 $method = array_shift($url_parts); # tar ut andra värdet och lägger den i $method, i vårt exempel ovan "single"
 
 # Hämta in klassfilen för den klass vi ska anropa
-require_once("classes/".$class.".class.php"); 
+require_once("classes/".$class.".class.php");
 
-# Anropa metoden vill vill köra på klassen vi har fått från vår URL 
+# Anropa metoden vill vill köra på klassen vi har fått från vår URL
 # samt skicka med övriga parametrar in till den metoden, i vårt exempel ovan finns "11" kvar
 # Svaret från anropet av metoden, dvs det den kör return på, lagrar vi i $data
 $data = $class::$method($URLparts); 
 
 
 if(isset($data['redirect'])){ # om $data innehåller något på nyckeln 'redirect'
-	
-	# header() sätter en HTTP-header. I det här faller 'Location: ' 
+
+	# header() sätter en HTTP-header. I det här faller 'Location: '
 	# som säger åt webbläsaren att ladda en annan sida istället
 	# Sidan vi ber den ladda är innehållet vi fick i $data['redirect']
 	# vilket alltså bestämdes av den klass och metod vi anropade
-	header("Location: ".$data['redirect']); 
+	header("Location: ".$data['redirect']);
 
 }else{ # om $data INTE innehåller något på nyckeln 'redirect'
-	
+
 	# startTwig() ligger längre ner i den här filen och kör de rader kod vi behöver för att starta Twig
 	$twig = startTwig();
 
@@ -37,7 +38,7 @@ if(isset($data['redirect'])){ # om $data innehåller något på nyckeln 'redirec
 		$template = 'index.html';
 	}
 
-	# låt Twig rendera den template vi pekat ut ovan och skicka med den $data 
+	# låt Twig rendera den template vi pekat ut ovan och skicka med den $data
 	# som vi fick från metoden vi anropade
 	echo $twig->render($template, $data);
 }
@@ -64,16 +65,16 @@ function getUrlParts($get){
 	# i det här faller tar vi $get som vi fick in i funktionen och som från början var $_GET
 	# sen lagrar vi det värdet i $_get_params
 	$get_params = array_keys($get);
-	
+
 	# eftersom vi bara skickat en nyckel i vår URL ligger den på position 0 i vår nya array
 	# vi plockar ut det värdet till $url som nu kommer innehålle en string med värder "/Posts/all" enligt vårt exempel
 	$url = $get_params[0];
 
 	# det vi vill göra nu är att slå sönder denna på alla / så vi kan ta varje ord för sig
 	# jag vill i vårt exempel alltså få ur "Posts" och "all" var för sig
-	# därför använder vi explode() och delar vår string på alla "/" 
+	# därför använder vi explode() och delar vår string på alla "/"
 	$url_parts = explode("/",$url);
-	
+
 	# $url_parts är nu en array med ett värde för varje del som blev av vår string
 	# när vi delade den på /
 	# eftersom vi har ett initialt / och kanske även kan råka skriva för många / exempelvis /Posts//all/
@@ -90,7 +91,7 @@ function getUrlParts($get){
 
 	# och avslutar med att returnera vår tvättade array som nu innehåller:
 	# [0] => "Posts", [1] => "all"
-	return $url_parts; 
+	return $url_parts;
 }
 
 
@@ -99,6 +100,6 @@ function getUrlParts($get){
 function startTwig(){
 	require_once('Twig/lib/Twig/Autoloader.php');
 	Twig_Autoloader::register();
-	$loader = new Twig_Loader_Filesystem('templates/');
-	return $twig = new Twig_Environment($loader);
+	$x = new Twig_Loader_Filesystem('templates/');
+	return $twig = new Twig_Environment($x);
 }
